@@ -17,6 +17,22 @@ It does **not** include:
 - browser-specific sessions
 - any credentials or access details
 
+## Architecture
+
+```mermaid
+flowchart TD
+    A["Public Framework Repo"] --> B["Skill workflow and templates"]
+    A --> C["Safe docs and setup guides"]
+    D["Private Local Overlay"] --> E["Resume facts"]
+    D --> F["Overleaf target"]
+    D --> G["Naming rules"]
+    D --> H["Browser workflow notes"]
+    B --> I["Tailor resume from JD"]
+    E --> I
+    F --> J["Update Overleaf and export PDF"]
+    G --> J
+```
+
 ## Recommended structure
 
 Publish this folder as its own GitHub repository, or copy its contents into a fresh repo.
@@ -38,6 +54,16 @@ See:
 - `resume-overleaf-framework/references/private-config-template.md`
 - `resume-overleaf-framework/references/resume-facts-template.md`
 
+## Quick Start
+
+1. Copy this repository locally.
+2. Create your own private files from the templates in `resume-overleaf-framework/references/`.
+3. Keep those private files outside Git or under a Git-ignored `private/` folder.
+4. Point the workflow at your own Overleaf project and naming rules.
+5. Install the skill locally in your own Codex skills directory.
+
+See [LOCAL_SETUP.md](LOCAL_SETUP.md) for the local private overlay pattern.
+
 ## Suggested repo split
 
 - Public GitHub repo:
@@ -48,3 +74,7 @@ See:
   - personal resume preferences
   - Overleaf target
   - browser-specific instructions
+
+## License
+
+This repository uses the MIT License. See [LICENSE](LICENSE).
