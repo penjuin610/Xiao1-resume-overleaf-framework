@@ -1,11 +1,11 @@
 # Private Config Template
 
-Create a private local file based on this template. Do not commit the filled version to a public repository.
+Create a private local file from this template.
+Do not commit the filled version to a public repository.
 
-## Browser Targets
+## Overleaf Target
 
 - Overleaf project URL: `<your private overleaf project url>`
-- Preferred browser workflow: `<logged-in chrome / overleaf / manual confirm if needed>`
 
 ## Naming Rule
 
@@ -16,9 +16,16 @@ Examples:
 - `Stripe DA Jane Doe resume.pdf`
 - `RBC Risk Analyst Jane Doe resume.pdf`
 
-## Workflow Notes
+## Browser Workflow
 
-- Which job pages you usually send
-- Whether LinkedIn is already logged in
-- What to do if the page is ambiguous
-- How to handle login prompts, CAPTCHAs, or access issues
+- preferred browser: `<logged-in chrome / another browser / manual handoff>`
+- JD source pattern you usually send: `<direct JD / LinkedIn jobs / company portal>`
+- what to do if the JD page is ambiguous
+- what to do if Overleaf login expires
+- what to do if browser automation is blocked
+
+## Export Notes
+
+- whether the agent should download automatically
+- whether the agent should pause before export
+- whether there is a local fallback when Overleaf is unavailable

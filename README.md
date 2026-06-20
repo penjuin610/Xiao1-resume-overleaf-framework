@@ -1,80 +1,137 @@
-# Resume Overleaf Framework
+# Xiao1 Resume Overleaf Framework
 
-This folder is the **public-safe GitHub package** for a resume-tailoring skill.
+This repository is the public-safe version of a private resume workflow.
 
-It is designed to publish the framework only:
+It is designed for one job-search pattern:
 
-- how to read a JD
-- how to tailor a resume safely
-- how to update Overleaf
-- how to export and rename the final PDF
+1. read a JD from a public or logged-in page
+2. map that JD to a private resume fact base
+3. rewrite a fixed LaTeX resume
+4. update a private Overleaf project
+5. compile and download a job-specific PDF
+6. save a local record of that application
 
-It does **not** include:
+This repository publishes the framework only.
 
-- personal resume facts
-- names, emails, phone numbers, or locations
-- private Overleaf project URLs
-- browser-specific sessions
-- any credentials or access details
+It does not publish:
 
-## Architecture
+- any real name, email, phone number, city, or work history
+- any private Overleaf URL
+- any browser session or login state
+- any private resume bullets or personal strategy notes
+- any machine-specific path that would let someone control another person's computer
 
-```mermaid
-flowchart TD
-    A["Public Framework Repo"] --> B["Skill workflow and templates"]
-    A --> C["Safe docs and setup guides"]
-    D["Private Local Overlay"] --> E["Resume facts"]
-    D --> F["Overleaf target"]
-    D --> G["Naming rules"]
-    D --> H["Browser workflow notes"]
-    B --> I["Tailor resume from JD"]
-    E --> I
-    F --> J["Update Overleaf and export PDF"]
-    G --> J
+## What This Repo Is
+
+- a public skill package that can be shown to any AI agent
+- a safe explanation of how the workflow is structured
+- a starter template for building a private resume engine on top of it
+
+## What This Repo Is Not
+
+- a plug-and-play repo that can tailor resumes without private input
+- a personal resume database
+- an auto-login or auto-control package for someone else's browser
+- a finished hosted job-application product
+
+## Repo Layout
+
+```text
+public-skill-package/
+├── README.md
+├── LOCAL_SETUP.md
+├── OPTIONAL_EXTENSIONS.md
+├── LICENSE
+└── resume-overleaf-framework/
+    ├── SKILL.md
+    └── references/
+        ├── facts-and-preferences-template.md
+        ├── private-config-template.md
+        └── resume-facts-template.md
 ```
 
-## Recommended structure
+## The 3 Private Files
 
-Publish this folder as its own GitHub repository, or copy its contents into a fresh repo.
+A real deployment of this framework should have 3 private local documents.
 
-Do **not** publish the whole current local workspace, because that workspace may contain private local context and drafts.
+1. `facts-and-preferences.md`
+Purpose:
+Stores strategy rules and editing preferences.
+Examples:
+what experiences are always kept, what can be removed, preferred page length, how to handle projects, how to compress for one page, writing style preferences.
 
-## What users must add themselves
+2. `resume-facts.md`
+Purpose:
+Stores the factual resume database.
+Examples:
+name, contact info, education, job titles, dates, locations, safe themes, project links, hard truth constraints.
 
-Before using this framework, each user should create their own local private files for:
+3. `private-config.md`
+Purpose:
+Stores local execution settings.
+Examples:
+Overleaf project URL, PDF naming rule, browser assumptions, login-handling notes, export behavior.
 
-- resume facts
-- core/optional experience rules
-- naming preferences
-- Overleaf project URL
-- local browser workflow details
+These files are intentionally not included with real values.
 
-See:
+## How An AI Agent Should Use This Repo
 
-- `resume-overleaf-framework/references/private-config-template.md`
-- `resume-overleaf-framework/references/resume-facts-template.md`
+Any AI agent using this framework should follow this order:
+
+1. read `resume-overleaf-framework/SKILL.md`
+2. read the user's private `facts-and-preferences.md`
+3. read the user's private `resume-facts.md`
+4. read the user's private `private-config.md`
+5. read the JD
+6. tailor the resume without changing facts
+7. update Overleaf or another private LaTeX target
+8. export and rename the final PDF
+
+The public skill should never be treated as the source of truth by itself.
+It is a controller, not the data layer.
 
 ## Quick Start
 
-1. Copy this repository locally.
-2. Create your own private files from the templates in `resume-overleaf-framework/references/`.
-3. Keep those private files outside Git or under a Git-ignored `private/` folder.
-4. Point the workflow at your own Overleaf project and naming rules.
-5. Install the skill locally in your own Codex skills directory.
+1. Clone or download this repository.
+2. Create your own 3 private files from the templates in `resume-overleaf-framework/references/`.
+3. Store those filled private files outside Git or under a Git-ignored private folder.
+4. Install `resume-overleaf-framework/SKILL.md` into your local AI-agent skills folder.
+5. Tell your agent where your private files live.
+6. Test with one JD link before trying any automation.
 
-See [LOCAL_SETUP.md](LOCAL_SETUP.md) for the local private overlay pattern.
+See [LOCAL_SETUP.md](LOCAL_SETUP.md) for a concrete local setup pattern.
 
-## Suggested repo split
+## Privacy Model
 
-- Public GitHub repo:
-  - framework only
-  - no personal data
-- Private local folder or private repo:
-  - actual resume database
-  - personal resume preferences
-  - Overleaf target
-  - browser-specific instructions
+Recommended split:
+
+- public repo:
+  framework, docs, templates, safe workflow logic
+- private local overlay or private repo:
+  actual resume database, exact preferences, Overleaf target, local paths, browser behavior
+
+If a file contains personal resume content or live access details, keep it private.
+
+## Optional Add-Ons
+
+This repo can be extended, but those extensions are optional rather than required:
+
+- local website shell with URL input and ledger history
+- job ledger and run-history storage
+- browser automation adapters
+- local PDF fallback pipeline
+- manual-review checkpoints before apply/submit
+
+See [OPTIONAL_EXTENSIONS.md](OPTIONAL_EXTENSIONS.md).
+
+## Audience
+
+This repo is useful if you want:
+
+- a reusable AI skill for JD-to-resume work
+- a public-safe GitHub repo that explains your process
+- a way to separate framework from personal data cleanly
 
 ## License
 
-This repository uses the MIT License. See [LICENSE](LICENSE).
+MIT. See [LICENSE](LICENSE).

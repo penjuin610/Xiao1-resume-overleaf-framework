@@ -1,8 +1,9 @@
 # Resume Facts Template
 
-Create a private local resume database using this structure. Do not commit the filled version to a public repository.
+Create a private local resume database from this template.
+Do not commit the filled version to a public repository.
 
-## Basic Info
+## Basic Information
 
 - Name: `<your name>`
 - Email: `<your email>`
@@ -11,43 +12,61 @@ Create a private local resume database using this structure. Do not commit the f
 
 ## Education
 
-- School
-  - Program
-  - Location
-  - Dates
-  - GPA
-  - Optional role-relevant academic positioning
+### `<school>`
 
-## Core Experiences
+- Program: `<program>`
+- Location: `<city>`
+- Dates: `<dates>`
+- GPA: `<gpa>`
 
-List the experiences that should almost always be preserved.
+## Core Experience Facts
 
-- Company
-  - Title
-  - Location
-  - Dates
-  - Safe themes
+### `<company>`
 
-## Optional Experiences
+- Title: `<title>`
+- Location: `<location>`
+- Dates: `<dates>`
+- Safe themes:
+  - `<theme>`
+  - `<theme>`
 
-List experiences that can be shortened or removed depending on role fit.
+## Optional Experience Facts
 
-- Company
-  - Title
-  - Location
-  - Dates
-  - Safe themes
+### `<company>`
+
+- Title: `<title>`
+- Location: `<location>`
+- Dates: `<dates>`
+- Safe themes:
+  - `<theme>`
+  - `<theme>`
+
+## Project And Resource Facts
+
+### `<project name>`
+
+- Type: `<github project / personal project / research track>`
+- URL: `<optional link>`
+- Safe themes:
+  - `<theme>`
+  - `<theme>`
+- Placement guidance:
+  - `<rule>`
+  - `<rule>`
+
+## Tools
+
+- `<tool>`
+- `<tool>`
+
+## Credentials
+
+- `<credential>`
+- `<credential>`
 
 ## Hard Rules
 
 - facts that must never change
 - titles that must never be inflated
 - tools that must not be overstated
-
-## Preferences
-
-- one-page vs two-page default
-- education detail preference
-- projects section preference
-- naming rules
-- preferred public wording style
+- items that must stay as projects rather than formal experience

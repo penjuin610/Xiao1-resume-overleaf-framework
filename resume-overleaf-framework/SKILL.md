@@ -1,98 +1,111 @@
 ---
 name: resume-overleaf-framework
-description: Use when a user wants to turn a job description into a tailored resume, update an Overleaf project, compile the PDF, and export a job-specific file while keeping personal data in a separate private configuration.
+description: Use when a user wants a reusable JD-to-resume workflow that separates public process from private resume data, private Overleaf targets, and local browser behavior.
 ---
 
 # Resume Overleaf Framework
 
-## Overview
+## Purpose
 
-This is a reusable framework for a private resume-tailoring workflow.
+This skill is the public controller for a private resume workflow.
 
-It supports this high-level flow:
+It tells an AI agent how to:
 
-1. Read a job description from a public page or a logged-in jobs page
-2. Map the JD to a private resume fact base
-3. Rewrite the resume in a fixed LaTeX template
-4. Update a private Overleaf project
-5. Compile and export the final PDF
-6. Rename the exported PDF using a job-specific filename
+1. read a JD
+2. load private resume context
+3. tailor a fixed resume template
+4. update a private Overleaf project
+5. export a renamed PDF
 
-This public skill must never hardcode personal resume data, browser targets, or private project URLs.
+This skill is not allowed to contain real personal data.
 
-## When To Use
+## Required Private Files
 
-Use this skill when the user:
+Before acting, the agent should load 3 private local files:
 
-- sends a JD link and wants a tailored resume
-- asks to update a resume in Overleaf
-- wants a repeatable browser-assisted resume workflow
-- wants a framework that separates public process from private profile data
+1. `facts-and-preferences.md`
+Purpose:
+editing rules, page-fit rules, inclusion rules, and strategy preferences
 
-Do not use this skill as the sole source of resume truth. It requires a private local profile.
+2. `resume-facts.md`
+Purpose:
+factual resume database and hard truth constraints
 
-## Required Private Inputs
+3. `private-config.md`
+Purpose:
+Overleaf target, naming rules, and local browser/export notes
 
-Before using this framework, load the user's own private files:
+If those files do not exist yet, the agent should stop and tell the user to create them from the templates in `references/`.
 
-- personal fact base
-- resume preferences
-- Overleaf project target
-- PDF naming convention
-- browser workflow notes
+## What This Skill Must Never Do
 
-Use the templates in `references/` as examples of what the user must create locally.
+- never invent experience
+- never change dates, titles, employers, or locations unless the private files explicitly say so
+- never publish personal data into the public repo
+- never assume a public copy of the skill should be able to control a specific person's browser
+- never hardcode private Overleaf URLs, credentials, or machine-specific access details
 
-## Rules
-
-- Keep public framework and private profile data separate.
-- Never commit personal facts, emails, phone numbers, exact resume content, or private URLs into the public version of the skill.
-- Never assume a downloaded public copy of the skill should be able to control a specific person's browser or computer.
-- Treat Overleaf targets, local paths, and naming conventions as private configuration.
-
-## Workflow
+## Core Workflow
 
 ### 1. Read the JD
 
-- Accept a public JD URL or a jobs page from a logged-in browser session.
-- If the page contains multiple postings, identify the target role before proceeding.
-- If the page is ambiguous, ask the user which role to use.
+- accept a public JD link or a logged-in jobs page
+- identify the correct role before tailoring
+- if the page contains multiple roles and the target is unclear, ask the user which one to use
 
-### 2. Load the private profile
+### 2. Load private context
 
-- Read the user's private fact base and preferences from local-only files.
-- Determine:
-  - core experiences
-  - optional experiences
-  - education detail level
-  - one-page vs multi-page preference
-  - naming convention
-  - private Overleaf target
+- read `facts-and-preferences.md`
+- read `resume-facts.md`
+- read `private-config.md`
+
+The agent should understand the private context in this order:
+
+- what must stay true
+- what should usually be kept
+- what is optional
+- how the resume should be compressed or expanded
+- how the final PDF should be named
 
 ### 3. Tailor the resume
 
-- Preserve facts exactly.
-- Tailor language to the JD.
-- Keep the user's fixed LaTeX structure unless the private rules say otherwise.
-- Cut low-priority experience before weakening core experience or distorting facts.
+- preserve facts exactly
+- map the JD to the most relevant experiences, projects, tools, and credentials
+- keep the fixed LaTeX structure unless the private instructions say otherwise
+- remove low-priority experience before weakening core evidence
+- avoid sparse one-page outputs and avoid tiny spillover onto a second page
 
 ### 4. Update Overleaf
 
-- Use the user's already-authenticated browser session when available.
-- Open the user's configured Overleaf project.
-- Replace the LaTeX content.
-- Recompile and verify the page count.
+- prefer the user's already-authenticated browser session when available
+- open the configured Overleaf project from the private config
+- replace the LaTeX content
+- recompile
+- verify the page result
 
-### 5. Export and rename
+### 5. Export
 
-- Download the compiled PDF.
-- Rename it using the private naming rule.
+- download the PDF
+- rename it using the private naming rule
+- report what was shortened or removed if relevant
 
-## Output
+## Output Expectation
 
 The workflow should end with:
 
-- updated LaTeX source
-- compiled PDF
-- renamed PDF file
-- short note on what was shortened or removed, if relevant
+- tailored LaTeX source
+- final PDF
+- job-specific filename
+- short note about major trimming or selection choices
+
+## If The User Wants More Than The Skill
+
+If the user also wants:
+
+- a website shell
+- a job ledger
+- browser adapters
+- a local app
+- an apply-flow wrapper
+
+point them to the repo-level optional guide instead of pretending those pieces already exist in the base skill.
