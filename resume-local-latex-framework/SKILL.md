@@ -12,11 +12,13 @@ This skill controls the local LaTeX version of a private JD-to-resume workflow.
 It tells an AI agent how to:
 
 1. read a JD
-2. load private resume context
-3. tailor local `.tex` files
-4. compile with `latexmk`
-5. validate the PDF
-6. save the final PDF to a configured output folder
+2. extract a short JD signal file
+3. create a role-specific workspace
+4. load a compact private context package
+5. tailor local `.tex` override files
+6. compile with `latexmk`
+7. validate the PDF
+8. save the final PDF to a configured output folder
 
 This skill is public-safe. It must not contain real personal data, private paths, or machine-specific secrets.
 
@@ -32,6 +34,11 @@ Before editing resume content, load:
 
 3. `local-config.md`  
    Resume engine path, compiler, output folder, build folder, and naming rules.
+
+Optional but recommended for the local v2 workflow:
+
+4. `private-profile.compact.json`  
+   A compact machine-readable facts file used by `resume.py prepare-context` to select relevant factual anchors without loading the full private database every time.
 
 If those files do not exist yet, stop and tell the user to create them from the templates in `references/`.
 
@@ -53,9 +60,11 @@ resume-engine/
 ├── private/
 │   ├── resume-facts.md
 │   ├── facts-and-preferences.md
+│   ├── private-profile.compact.json
 │   └── local-config.md
 ├── output/
 │   └── build/
+├── resume.py
 └── scripts/
     └── build_resume.sh
 ```
@@ -70,19 +79,44 @@ resume-engine/
 
 ## Workflow
 
-### 1. Read The JD
+### 1. Read And Compress The JD
 
 - accept a public JD link, company job page, or user-provided JD text
-- identify company, role, seniority, responsibilities, and required skills
-- ask for clarification when the target role is ambiguous
+- identify company, role, seniority, responsibilities, tools, industry keywords, and required skills
+- save only the relevant JD signal into a short `jd.md`
+- ask the user to paste/upload the JD if the page requires login, CAPTCHA, permission access, or cannot be reliably extracted
+- do not repeatedly attempt browser automation for inaccessible pages
 
-### 2. Load Private Context
+### 2. Initialize The Role
 
-Read:
+When `resume.py` is available, run:
 
-1. `resume-facts.md`
-2. `facts-and-preferences.md`
-3. `local-config.md`
+```sh
+python3 resume.py init-job --company "Company" --role "Role" --jd-file "/path/to/jd.md"
+```
+
+This should:
+
+- create a safe role key
+- create `source/roles/<role-key>/`
+- copy `jd.md`
+- write `job.json`
+- update `source/roles/active.tex`
+- avoid copying every baseline `.tex` file
+
+### 3. Prepare Minimal Context
+
+Run:
+
+```sh
+python3 resume.py prepare-context --role-key "<role-key>"
+```
+
+Then read only:
+
+1. generated `source/roles/<role-key>/context.md`
+2. baseline `.tex` sections recommended by the context
+3. relevant raw fact paragraphs only when fact verification is needed
 
 Understand:
 
@@ -93,20 +127,26 @@ Understand:
 - preferred page target
 - output naming rule
 
-### 3. Edit Local LaTeX Files
+### 4. Edit Local LaTeX Files
 
 Prefer small edits:
 
-- update only relevant `source/content/*.tex` modules, or
-- create job-specific overrides under `source/roles/[company-role]/`
+- create job-specific overrides under `source/roles/<role-key>/`
+- edit only needed sections, usually `experience.tex`, `skills.tex`, and `projects.tex`
 
-Avoid rewriting the whole resume when a module override is enough.
+Avoid rewriting the whole resume when a local override is enough. Do not modify baseline content to fit a single JD.
 
-### 4. Compile Locally
+### 5. Compile Locally
 
-Use `latexmk` through the configured build script.
+Use `resume.py build` when available. It must call the configured build script instead of reimplementing LaTeX logic.
 
-Default command shape:
+Default command:
+
+```sh
+python3 resume.py build --company "Company" --role "Role" --require-one-page
+```
+
+Fallback command:
 
 ```sh
 ./scripts/build_resume.sh --company "Company" --role "Role" --require-one-page
@@ -116,7 +156,7 @@ Prefer XeLaTeX unless the template explicitly requires another engine.
 
 If a package is missing, report the missing package clearly. Do not delete styling or resume content to bypass the error.
 
-### 5. Validate The PDF
+### 6. Validate The PDF
 
 Check:
 
@@ -136,6 +176,14 @@ pdffonts final.pdf
 pdftotext final.pdf -
 ```
 
+### 7. Reset Baseline When Needed
+
+After smoke tests or when returning the engine to its default state, run:
+
+```sh
+python3 resume.py reset-baseline
+```
+
 ## Output Expectation
 
 End with:
@@ -146,4 +194,4 @@ End with:
 - compile status
 - full final PDF path
 - whether the result met the page target
-
+- any facts that need user confirmation

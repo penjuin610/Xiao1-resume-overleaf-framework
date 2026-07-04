@@ -67,10 +67,12 @@ your-workspace/
 │   │   └── roles/
 │   ├── private/
 │   │   ├── facts-and-preferences.md
+│   │   ├── private-profile.compact.json
 │   │   ├── local-config.md
 │   │   └── resume-facts.md
 │   ├── output/
 │   │   └── build/
+│   ├── resume.py
 │   └── scripts/
 │       └── build_resume.sh
 └── resumes/
@@ -99,6 +101,33 @@ Then verify:
 - build log has no LaTeX errors
 - there are no missing font warnings
 - text extracts without mojibake
+
+### Optional Local v2 Helper
+
+Copy `resume-local-latex-framework/scripts/resume.py` into your private `resume-engine/` root if you want the deterministic helper workflow.
+
+Example flow:
+
+```sh
+cd /path/to/resume-engine
+
+python3 resume.py init-job \
+  --company "ExampleCo" \
+  --role "Data Analyst" \
+  --jd-file "/path/to/short-jd.md"
+
+python3 resume.py prepare-context \
+  --role-key "exampleco-data-analyst"
+
+python3 resume.py build \
+  --company "ExampleCo" \
+  --role "Data Analyst" \
+  --require-one-page
+
+python3 resume.py reset-baseline
+```
+
+`resume.py` should not generate resume bullets or call an AI API. It only prepares folders, context, build commands, concise JSON output, and private ledger entries.
 
 ## What Each Private File Does
 
@@ -151,4 +180,5 @@ Never commit these into a public repo:
 - browser/session assumptions tied to your machine
 - private resume bullets
 - downloaded PDFs
+- generated role-specific `jd.md`, `context.md`, `job.json`, and application ledger files
 - generated `.aux`, `.log`, `.out`, `.xdv`, or other build artifacts

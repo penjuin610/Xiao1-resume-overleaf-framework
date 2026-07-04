@@ -27,6 +27,17 @@ Examples:
 ./scripts/build_resume.sh --company "<Company>" --role "<Role>" --require-one-page
 ```
 
+## Optional Helper Commands
+
+```sh
+python3 resume.py init-job --company "<Company>" --role "<Role>" --jd-file "<short-jd.md>"
+python3 resume.py prepare-context --role-key "<company-role>"
+python3 resume.py build --company "<Company>" --role "<Role>" --require-one-page
+python3 resume.py reset-baseline
+```
+
+`resume.py` should call `scripts/build_resume.sh` for compilation. It should not generate resume content or replace the agent's judgment.
+
 ## Validation Requirements
 
 - compile must succeed
@@ -36,4 +47,3 @@ Examples:
 - log should not contain overfull/underfull warnings
 - fonts should be embedded
 - text should extract cleanly
-

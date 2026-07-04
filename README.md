@@ -15,6 +15,23 @@ Both workflows use the same principle:
 
 This repository intentionally contains no real personal resume data.
 
+## Latest Update: Local Workflow v2
+
+The previous version introduced the two workflow choices above: an Overleaf browser workflow for users who keep their canonical resume in Overleaf, and a local LaTeX workflow for users who prefer local `.tex` files and local PDF builds.
+
+This update keeps that split, but makes the local workflow more efficient and more reproducible. The local path now includes a small `resume.py` helper that handles deterministic, repetitive steps:
+
+- create a role folder and safe role key
+- store a short `jd.md`
+- generate a compact `context.md`
+- activate a role by updating `source/roles/active.tex`
+- call the existing `scripts/build_resume.sh`
+- return short JSON instead of long LaTeX logs
+- append a private application ledger
+- reset back to baseline
+
+The design goal is **not** to let Python write the resume. The agent still reads the JD, checks facts, and edits only the necessary LaTeX override files. Python simply removes mechanical work that would otherwise waste context tokens.
+
 ## What This Repo Does Not Include
 
 - real name, email, phone number, city, or work history
@@ -45,6 +62,7 @@ public-skill-package/
     │   ├── facts-and-preferences-template.md
     │   └── resume-facts-template.md
     └── scripts/
+        ├── resume.py
         └── build_resume.sh
 ```
 
@@ -63,6 +81,7 @@ Use the **local LaTeX workflow** when:
 - you want faster local builds without browser automation
 - you want files organized as a local resume engine
 - you want the final PDF written directly to a local output folder
+- you want deterministic helper commands to reduce repeated context loading and long build logs
 
 ## Shared Private Files
 
@@ -91,6 +110,16 @@ For either mode, the agent should:
 6. edit the resume without inventing facts
 7. compile/export the PDF through the selected workflow
 8. validate page count, errors, warnings, and final filename
+
+For the local v2 mode, the agent should use this shorter loop:
+
+1. read the JD link or pasted JD text and save a short `jd.md`
+2. run `python3 resume.py init-job`
+3. run `python3 resume.py prepare-context`
+4. read only `context.md` and the baseline sections that need overrides
+5. edit only files under `source/roles/<role-key>/`
+6. run `python3 resume.py build --company "..." --role "..." --require-one-page`
+7. report the final PDF path, page count, changed override files, and any fact questions
 
 ## Safety Model
 
