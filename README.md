@@ -1,38 +1,28 @@
-# Xiao1 Resume Overleaf Framework
+# Resume Workflow Skills
 
-This repository is the public-safe version of a private resume workflow.
+This repository is a public-safe skill package for AI-assisted JD-to-resume work.
 
-It is designed for one job-search pattern:
+It documents two ways to run the same core workflow:
 
-1. read a JD from a public or logged-in page
-2. map that JD to a private resume fact base
-3. rewrite a fixed LaTeX resume
-4. update a private Overleaf project
-5. compile and download a job-specific PDF
-6. save a local record of that application
+1. **Overleaf browser workflow**: an agent updates a private Overleaf project through a user-controlled browser session, recompiles online, then exports the PDF.
+2. **Local LaTeX workflow**: an agent edits local `.tex` files, compiles with a local TeX installation such as MacTeX, and writes the final PDF to a local output folder.
 
-This repository publishes the framework only.
+Both workflows use the same principle:
 
-It does not publish:
+- the public repo stores process and templates
+- the private overlay stores real resume facts, private paths, URLs, and preferences
+- the agent must tailor only from confirmed facts
 
-- any real name, email, phone number, city, or work history
-- any private Overleaf URL
-- any browser session or login state
-- any private resume bullets or personal strategy notes
-- any machine-specific path that would let someone control another person's computer
+This repository intentionally contains no real personal resume data.
 
-## What This Repo Is
+## What This Repo Does Not Include
 
-- a public skill package that can be shown to any AI agent
-- a safe explanation of how the workflow is structured
-- a starter template for building a private resume engine on top of it
-
-## What This Repo Is Not
-
-- a plug-and-play repo that can tailor resumes without private input
-- a personal resume database
-- an auto-login or auto-control package for someone else's browser
-- a finished hosted job-application product
+- real name, email, phone number, city, or work history
+- private Overleaf project URLs
+- browser session data or login state
+- private resume bullets or application strategy notes
+- machine-specific paths that would control a real computer
+- generated resume PDFs
 
 ## Repo Layout
 
@@ -42,95 +32,101 @@ public-skill-package/
 ├── LOCAL_SETUP.md
 ├── OPTIONAL_EXTENSIONS.md
 ├── LICENSE
-└── resume-overleaf-framework/
+├── resume-overleaf-framework/
+│   ├── SKILL.md
+│   └── references/
+│       ├── facts-and-preferences-template.md
+│       ├── private-config-template.md
+│       └── resume-facts-template.md
+└── resume-local-latex-framework/
     ├── SKILL.md
-    └── references/
-        ├── facts-and-preferences-template.md
-        ├── private-config-template.md
-        └── resume-facts-template.md
+    ├── references/
+    │   ├── local-config-template.md
+    │   ├── facts-and-preferences-template.md
+    │   └── resume-facts-template.md
+    └── scripts/
+        └── build_resume.sh
 ```
 
-## The 3 Private Files
+## Which Workflow Should I Use?
 
-A real deployment of this framework should have 3 private local documents.
+Use the **Overleaf browser workflow** when:
 
-1. `facts-and-preferences.md`
-Purpose:
-Stores strategy rules and editing preferences.
-Examples:
-what experiences are always kept, what can be removed, preferred page length, how to handle projects, how to compress for one page, writing style preferences.
+- your canonical resume template already lives in Overleaf
+- you want Overleaf to compile and preview the PDF
+- your AI agent can safely use an already-authenticated browser session
+- you prefer a browser-based editing and export loop
 
-2. `resume-facts.md`
-Purpose:
-Stores the factual resume database.
-Examples:
-name, contact info, education, job titles, dates, locations, safe themes, project links, hard truth constraints.
+Use the **local LaTeX workflow** when:
 
-3. `private-config.md`
-Purpose:
-Stores local execution settings.
-Examples:
-Overleaf project URL, PDF naming rule, browser assumptions, login-handling notes, export behavior.
+- you have MacTeX, TeX Live, or another local TeX distribution installed
+- you want faster local builds without browser automation
+- you want files organized as a local resume engine
+- you want the final PDF written directly to a local output folder
 
-These files are intentionally not included with real values.
+## Shared Private Files
 
-## How An AI Agent Should Use This Repo
+A real deployment should create private local files from the templates.
 
-Any AI agent using this framework should follow this order:
+1. `resume-facts.md`  
+   Factual resume database: contact fields, education, titles, dates, employers, locations, projects, safe themes, tools, credentials, and hard truth rules.
 
-1. read `resume-overleaf-framework/SKILL.md`
-2. read the user's private `facts-and-preferences.md`
-3. read the user's private `resume-facts.md`
-4. read the user's private `private-config.md`
-5. read the JD
-6. tailor the resume without changing facts
-7. update Overleaf or another private LaTeX target
-8. export and rename the final PDF
+2. `facts-and-preferences.md`  
+   Editing strategy: default experiences, optional experiences, project placement, page-fit rules, compression preferences, tone, and forbidden claims.
 
-The public skill should never be treated as the source of truth by itself.
-It is a controller, not the data layer.
+3. Workflow config file  
+   Use `private-config.md` for Overleaf, or `local-config.md` for local LaTeX. This file stores private execution details such as output paths, naming rules, and tool assumptions.
+
+Filled versions should stay outside the public repo or inside a Git-ignored private directory.
+
+## AI Agent Workflow
+
+For either mode, the agent should:
+
+1. read the relevant `SKILL.md`
+2. read the private fact base and preferences
+3. read the workflow config
+4. read the JD
+5. map the JD to real experiences, projects, tools, and credentials
+6. edit the resume without inventing facts
+7. compile/export the PDF through the selected workflow
+8. validate page count, errors, warnings, and final filename
+
+## Safety Model
+
+The public skill is a controller, not a data layer.
+
+The agent must not:
+
+- invent experience or dates
+- inflate titles or project ownership
+- copy private facts into this public repository
+- hardcode private URLs, local paths, or credentials
+- assume a public skill can control a specific browser or machine
 
 ## Quick Start
 
-1. Clone or download this repository.
-2. Create your own 3 private files from the templates in `resume-overleaf-framework/references/`.
-3. Store those filled private files outside Git or under a Git-ignored private folder.
-4. Install `resume-overleaf-framework/SKILL.md` into your local AI-agent skills folder.
-5. Tell your agent where your private files live.
-6. Test with one JD link before trying any automation.
+1. Clone this repository.
+2. Pick one workflow: Overleaf or local LaTeX.
+3. Copy the matching skill folder into your AI agent's local skills directory.
+4. Create private files from the templates under that skill's `references/`.
+5. Store filled private files outside Git or under a Git-ignored private folder.
+6. Test with one JD link and review the generated resume before automating exports.
 
-See [LOCAL_SETUP.md](LOCAL_SETUP.md) for a concrete local setup pattern.
-
-## Privacy Model
-
-Recommended split:
-
-- public repo:
-  framework, docs, templates, safe workflow logic
-- private local overlay or private repo:
-  actual resume database, exact preferences, Overleaf target, local paths, browser behavior
-
-If a file contains personal resume content or live access details, keep it private.
+See [LOCAL_SETUP.md](LOCAL_SETUP.md) for setup examples.
 
 ## Optional Add-Ons
 
-This repo can be extended, but those extensions are optional rather than required:
+The framework can be extended with:
 
-- local website shell with URL input and ledger history
-- job ledger and run-history storage
-- browser automation adapters
-- local PDF fallback pipeline
-- manual-review checkpoints before apply/submit
+- a local web app
+- a run ledger
+- browser adapters
+- a local PDF build pipeline
+- manual review checkpoints
+- application-form assistance
 
 See [OPTIONAL_EXTENSIONS.md](OPTIONAL_EXTENSIONS.md).
-
-## Audience
-
-This repo is useful if you want:
-
-- a reusable AI skill for JD-to-resume work
-- a public-safe GitHub repo that explains your process
-- a way to separate framework from personal data cleanly
 
 ## License
 

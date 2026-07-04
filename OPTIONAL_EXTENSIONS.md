@@ -36,7 +36,7 @@ Suggested fields:
 
 ## 3. Browser Automation Layer
 
-Use this if you want an agent to control an already logged-in browser session.
+Use this with the Overleaf workflow if you want an agent to control an already logged-in browser session.
 
 Recommended scope:
 
@@ -49,15 +49,17 @@ Recommended scope:
 
 Do not design the public repo so that it can automatically control a stranger's machine.
 
-## 4. Local PDF Fallback
+## 4. Local LaTeX Build Layer
 
-Use this if Overleaf is unavailable.
+Use this with the local workflow, or as a fallback when Overleaf is unavailable.
 
-Possible fallback paths:
+Recommended scope:
 
-- local TeX installation
-- another LaTeX build pipeline
-- a manual compile checkpoint
+- keep `.tex` source in a local resume engine
+- compile with `latexmk`
+- write temporary build files to a build folder
+- copy only the final PDF to an output folder
+- verify page count and warnings after each build
 
 ## 5. Manual Review Mode
 
@@ -89,7 +91,7 @@ Start with this order:
 1. public skill
 2. private files
 3. JD-to-resume generation
-4. Overleaf export
+4. choose Overleaf export or local LaTeX build
 5. ledger
 6. website shell
 7. form-assist or apply workflows

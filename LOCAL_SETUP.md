@@ -1,21 +1,14 @@
 # Local Setup
 
-This repository is intentionally incomplete until the user adds private local files.
+This repository is intentionally incomplete until you add private local files.
 
-The public repo provides the framework.
-The private overlay provides the real resume data.
+The public repo provides reusable skill logic. Your private overlay provides real resume data, execution paths, and workflow preferences.
 
-## Goal
+## Setup Option A: Overleaf Browser Workflow
 
-After setup, an AI agent should be able to:
+Use this option when your resume source lives in Overleaf and you want the agent to update a private Overleaf project.
 
-1. read a JD link
-2. load your private resume rules and facts
-3. tailor the resume
-4. update your private Overleaf project
-5. export a renamed PDF
-
-## Recommended Local Structure
+Recommended structure:
 
 ```text
 your-workspace/
@@ -33,28 +26,87 @@ your-workspace/
         └── resume-facts.md
 ```
 
+`private-config.md` should contain:
+
+- private Overleaf project URL
+- PDF naming convention
+- preferred browser workflow
+- what to do if login expires
+- whether to download automatically or pause for review
+
+Minimum test:
+
+1. Ask the agent to read a JD.
+2. Ask it to explain which private files it will load.
+3. Ask it to generate LaTeX only.
+4. Review facts and page-fit decisions.
+5. Only then test Overleaf update and PDF export.
+
+## Setup Option B: Local LaTeX Workflow
+
+Use this option when you want the agent to edit local `.tex` files and compile with a local TeX engine.
+
+Recommended structure:
+
+```text
+your-workspace/
+├── public-skill-package/
+│   └── resume-local-latex-framework/
+│       ├── SKILL.md
+│       ├── references/
+│       │   ├── facts-and-preferences-template.md
+│       │   ├── local-config-template.md
+│       │   └── resume-facts-template.md
+│       └── scripts/
+│           └── build_resume.sh
+├── resume-engine/
+│   ├── source/
+│   │   ├── main.tex
+│   │   ├── preamble.tex
+│   │   ├── content/
+│   │   └── roles/
+│   ├── private/
+│   │   ├── facts-and-preferences.md
+│   │   ├── local-config.md
+│   │   └── resume-facts.md
+│   ├── output/
+│   │   └── build/
+│   └── scripts/
+│       └── build_resume.sh
+└── resumes/
+    └── 2026/
+```
+
+`local-config.md` should contain:
+
+- local resume engine directory
+- LaTeX entrypoint
+- output folder for final PDFs
+- build folder for temporary files
+- compiler choice, usually XeLaTeX
+- PDF naming convention
+
+Minimum test:
+
+```sh
+./scripts/build_resume.sh --company "ExampleCo" --role "Analyst" --require-one-page
+```
+
+Then verify:
+
+- PDF exists in the configured final output folder
+- `pdfinfo` reports the expected page count
+- build log has no LaTeX errors
+- there are no missing font warnings
+- text extracts without mojibake
+
 ## What Each Private File Does
-
-### `facts-and-preferences.md`
-
-Use this file for editing strategy.
-
-Put here:
-
-- which experiences are always retained
-- which experiences are optional
-- how projects should be used
-- one-page vs 1.5-page vs 2-page rules
-- compression preferences
-- wording and tone preferences
 
 ### `resume-facts.md`
 
-Use this file for factual data only.
+Use this file for factual data only:
 
-Put here:
-
-- your name and contact details
+- name and contact placeholders
 - education facts
 - work experience facts
 - project facts
@@ -62,35 +114,32 @@ Put here:
 - credentials
 - hard truth rules such as dates and titles that must never change
 
-### `private-config.md`
+### `facts-and-preferences.md`
 
-Use this file for local execution settings.
+Use this file for editing strategy:
 
-Put here:
+- default experiences
+- optional experiences
+- project placement rules
+- one-page or two-page preferences
+- compression rules
+- forbidden claims
+- tone and wording preferences
 
-- your Overleaf project URL
-- your PDF naming convention
-- your preferred browser workflow
-- what the agent should do if login is expired
-- any local notes for export behavior
+### Workflow config
+
+Use `private-config.md` for Overleaf or `local-config.md` for local LaTeX.
+
+This file should store execution details, not resume facts.
 
 ## Install Into A Local Skill Folder
 
 Different AI agents expose skills differently, but the general pattern is:
 
-1. copy `resume-overleaf-framework/` into the agent's local skills directory
-2. keep the 3 filled private files outside the public repo or inside a Git-ignored private folder
-3. tell the agent to read the public skill and then your private files before acting
-
-## Minimum Test
-
-Before using the workflow for real applications:
-
-1. open a JD link
-2. ask the agent to explain which private files it will load
-3. ask it to generate resume LaTeX only
-4. verify that no facts were changed
-5. only then test Overleaf update and PDF export
+1. copy either `resume-overleaf-framework/` or `resume-local-latex-framework/` into the agent's local skills directory
+2. keep filled private files outside the public repo or inside a Git-ignored private folder
+3. tell the agent where those private files live
+4. test with a non-sensitive JD before using the workflow for real applications
 
 ## Safety Rules
 
@@ -98,21 +147,8 @@ Never commit these into a public repo:
 
 - filled private templates
 - real Overleaf links
-- browser/session assumptions that are tied to your machine
-- any private resume bullets
+- real local paths
+- browser/session assumptions tied to your machine
+- private resume bullets
 - downloaded PDFs
-
-## If You Want A Website Shell
-
-The website shell is optional.
-This repo does not require a frontend.
-
-If you want a website later, use this repo as the logic layer and add:
-
-- JD URL input
-- run history / ledger
-- run detail view
-- download button
-- optional browser automation trigger
-
-See [OPTIONAL_EXTENSIONS.md](OPTIONAL_EXTENSIONS.md).
+- generated `.aux`, `.log`, `.out`, `.xdv`, or other build artifacts

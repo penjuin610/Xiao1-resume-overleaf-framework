@@ -28,4 +28,7 @@ Examples:
 
 - whether the agent should download automatically
 - whether the agent should pause before export
-- whether there is a local fallback when Overleaf is unavailable
+- final PDF output folder
+- whether there is a local LaTeX fallback when Overleaf is unavailable
+
+For a full local-first workflow, use `resume-local-latex-framework` instead of this Overleaf config.
